@@ -1,3 +1,5 @@
+TATA CARA MENJALANKAN FILE
+
 Pertama, pastikan server dijalankan sebelum menjalankan client. Buka terminal pada perangkat yang digunakan sebagai server, lalu jalankan perintah: “python server.py”
 
 Server akan mulai mendengarkan koneksi pada alamat IP dan port yang telah ditentukan dalam code.
