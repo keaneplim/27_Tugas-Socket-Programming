@@ -34,9 +34,9 @@ def handle_client_message(data, client_address):
                 message_counters[client_address] = 0
                 # Kirim konfirmasi penerimaan username ke klien
                 server_socket.sendto("USERNAME_ACCEPTED".encode(), client_address)
-                print(f"Klien baru terhubung: {client_name} ({client_address})")
+                print(f"New user is connected: {client_name} ({client_address})")
                 # Siarkan pesan ke semua klien bahwa klien ini sudah bergabung
-                broadcast_message(f"{client_name} telah bergabung ke chat.", None)
+                broadcast_message(f"{client_name} has joined the chat.", None)
             return  # Keluar dari fungsi karena registrasi selesai
 
         # Tangani pesan biasa dari klien (dengan nomor urut)
@@ -53,7 +53,7 @@ def handle_client_message(data, client_address):
             if message.startswith("EXIT:"):
                 # Ambil username dari pesan
                 username = message.split(":")[1]
-                print(f"{username} telah meninggalkan chat.")
+                print(f"{username} has left the chat.")
                 # Hapus username dari pengguna aktif
                 active_usernames.remove(username)
                 # Hapus klien dari dictionary clients
@@ -61,26 +61,26 @@ def handle_client_message(data, client_address):
                 # Hapus penghitung pesan untuk klien ini
                 del message_counters[client_address]
                 # Siarkan pesan ke semua klien bahwa pengguna ini telah keluar
-                broadcast_message(f"{username} telah keluar dari chat.", None)
+                broadcast_message(f"{username} has left the chat.", None)
                 # Cek apakah tidak ada klien tersisa, lalu matikan server
                 if not clients:
-                    print("Semua klien sudah keluar. Mematikan server.")
+                    print("No users left, server is shutting down.")
                     server_socket.close()  # Tutup socket server
                     os._exit(0)  # Hentikan program
 
             else:
                 # Cetak pesan yang diterima beserta username klien
-                print(f"Pesan dari {clients[client_address]}: {message}")
+                print(f"Message from {clients[client_address]}: {message}")
                 # Siarkan pesan ke semua klien kecuali pengirim
                 broadcast_message(message, client_address)
 
         except struct.error:
             # Tangani kesalahan terkait unpacking pesan
-            print(f"Kesalahan saat unpacking pesan dari {client_address}")
+            print(f"Error during unpacking message from {client_address}")
 
     except Exception as e:
         # Tangkap dan cetak kesalahan lain yang terjadi saat menangani pesan
-        print(f"Kesalahan saat menangani pesan: {e}")
+        print(f"Error in handling message: {e}")
 
 def send_ack(client_address, seq_num):
     # Siapkan pesan ACK dengan mengemas nomor urut (seq_num) ke dalam format biner
